@@ -1,6 +1,7 @@
 /**
  * Input handler for mouse and touch controls
  * Handles horizontal positioning and drop mechanics
+ * Now supports drag-anywhere functionality
  */
 
 export class InputHandler {
@@ -43,38 +44,32 @@ export class InputHandler {
     }
 
     /**
-     * Handle move events (mouse/touch)
+     * Handle move events (mouse/touch) - now works anywhere on canvas
      */
     handleMove(e) {
         if (!this.enabled) return;
 
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
 
-        // Check if in drop zone
-        if (y < this.dropZoneY + 50) {
-            this.isHovering = true;
-            this.currentX = Math.max(50, Math.min(this.canvas.width - 50, x));
-        } else {
-            this.isHovering = false;
-        }
+        // Always track horizontal position anywhere on canvas
+        this.isHovering = true;
+        this.currentX = Math.max(50, Math.min(this.canvas.width - 50, x));
     }
 
     /**
-     * Handle start events (mousedown/touchstart)
+     * Handle start events (mousedown/touchstart) - works anywhere
      */
     handleStart(e) {
         if (!this.enabled) return;
 
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
 
-        if (y < this.dropZoneY + 50) {
-            this.isDragging = true;
-            this.currentX = Math.max(50, Math.min(this.canvas.width - 50, x));
-        }
+        // Start dragging from anywhere on canvas
+        this.isDragging = true;
+        this.isHovering = true;
+        this.currentX = Math.max(50, Math.min(this.canvas.width - 50, x));
     }
 
     /**

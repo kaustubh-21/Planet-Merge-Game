@@ -27,10 +27,10 @@ export class Game {
         this.renderer = new Renderer(canvas);
         this.particles = new ParticleSystem();
         this.input = new InputHandler(canvas, this.DROP_ZONE_Y);
-        this.ui = new UI(canvas);
+        this.ui = new UI(canvas, this.renderer); // Pass renderer for shared planet drawing
         this.audio = new AudioSystem();
 
-        // Game state
+        // Game state — first 4 planets are starters (Mercury, Mars, Venus, Earth)
         this.currentPlanetId = this.getRandomStartPlanet();
         this.nextPlanetId = this.getRandomStartPlanet();
         this.isGameOver = false;
@@ -57,10 +57,10 @@ export class Game {
     }
 
     /**
-     * Get random starting planet (Moon, Mercury, or Mars)
+     * Get random starting planet (Mercury, Mars, Venus, or Earth — indices 0-3)
      */
     getRandomStartPlanet() {
-        return Math.floor(Math.random() * 3); // 0, 1, or 2
+        return Math.floor(Math.random() * 4);
     }
 
     /**
@@ -164,19 +164,29 @@ export class Game {
                 event.x,
                 event.y,
                 event.oldPlanetId,
-                event.newPlanetId
+                event.type === 'disappear' ? event.oldPlanetId : event.newPlanetId
             );
 
             // Play merge sound
-            this.audio.playMergeSound(event.newPlanetId);
+            if (event.type === 'disappear') {
+                // Extra dramatic sound for Sun disappear
+                this.audio.playMergeSound(8);
+            } else {
+                this.audio.playMergeSound(event.newPlanetId);
+            }
 
             // Trigger haptic feedback
-            this.audio.triggerHaptic(event.newPlanetId / 5);
+            this.audio.triggerHaptic(event.type === 'disappear' ? 1.0 : event.newPlanetId / 8);
 
             // Add score
-            const planetConfig = getPlanetById(event.newPlanetId);
-            if (planetConfig) {
-                this.ui.addScore(planetConfig.points);
+            if (event.type === 'disappear') {
+                // Bonus score for Sun+Sun disappear
+                this.ui.addScore(200);
+            } else {
+                const planetConfig = getPlanetById(event.newPlanetId);
+                if (planetConfig) {
+                    this.ui.addScore(planetConfig.points);
+                }
             }
         }
 
@@ -206,7 +216,11 @@ export class Game {
 
         // Clear and draw background
         this.renderer.clear();
+        this.renderer.renderNebulae();
         this.renderer.renderStarfield(this.gameTime);
+
+        // Draw 3D container box
+        this.renderer.draw3DContainer();
 
         // Draw event horizon
         this.renderer.drawEventHorizon(this.EVENT_HORIZON_Y);
@@ -234,6 +248,9 @@ export class Game {
         // Draw UI (no screen shake)
         this.ui.drawScore();
         this.ui.drawNextPlanetPreview(this.nextPlanetId);
+
+        // Draw hierarchy chart at bottom
+        this.ui.drawHierarchyChart();
 
         // Draw game over screen
         if (this.isGameOver) {

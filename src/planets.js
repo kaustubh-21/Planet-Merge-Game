@@ -1,116 +1,97 @@
 /**
  * Planet configuration for Pandu
- * Each planet has a unique ID, visual properties, and physics parameters
- * Radius follows 1.3x multiplier progression
+ * 9 planets in merge order: Mercury → Mars → Venus → Earth → Neptune → Uranus → Saturn → Jupiter → Sun
+ * Base radius 16px with 1.25x multiplier per tier
+ * Sun + Jupiter diameters fit within the 450px container width
  */
 
-const BASE_RADIUS = 20; // Starting radius for Moon
-const RADIUS_MULTIPLIER = 1.3;
+const BASE_RADIUS = 16;
+const RADIUS_MULTIPLIER = 1.25;
 
 export const PLANETS = [
     {
         id: 0,
-        name: 'Moon',
-        radius: BASE_RADIUS,
-        color: '#C0C0C0',
-        glowColor: '#E8E8E8',
-        points: 1,
-        texture: 'crater'
-    },
-    {
-        id: 1,
         name: 'Mercury',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 1),
+        radius: BASE_RADIUS,
         color: '#8C7853',
         glowColor: '#B8A080',
-        points: 3,
+        points: 2,
         texture: 'rocky'
     },
     {
-        id: 2,
+        id: 1,
         name: 'Mars',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 2),
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 1)),
         color: '#CD5C5C',
         glowColor: '#FF6B6B',
-        points: 6,
+        points: 4,
         texture: 'dusty'
+    },
+    {
+        id: 2,
+        name: 'Venus',
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 2)),
+        color: '#E8B960',
+        glowColor: '#FFD280',
+        points: 8,
+        texture: 'venus'
     },
     {
         id: 3,
         name: 'Earth',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 3),
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 3)),
         color: '#4169E1',
         glowColor: '#6495ED',
-        points: 10,
+        points: 15,
         texture: 'earth'
     },
     {
         id: 4,
         name: 'Neptune',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 4),
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 4)),
         color: '#4682B4',
         glowColor: '#87CEEB',
-        points: 15,
+        points: 25,
         texture: 'gas'
     },
     {
         id: 5,
-        name: 'Saturn',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 5),
-        color: '#DAA520',
-        glowColor: '#FFD700',
-        points: 21,
-        texture: 'ringed',
-        hasRings: true
+        name: 'Uranus',
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 5)),
+        color: '#5FCED8',
+        glowColor: '#A0E8F0',
+        points: 40,
+        texture: 'gas'
     },
     {
         id: 6,
-        name: 'Jupiter',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 6),
-        color: '#D2691E',
-        glowColor: '#FF8C42',
-        points: 28,
-        texture: 'gas-giant'
+        name: 'Saturn',
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 6)),
+        color: '#DAA520',
+        glowColor: '#FFD700',
+        points: 60,
+        texture: 'gas',
+        hasRings: true
     },
     {
         id: 7,
-        name: 'Sun',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 7),
-        color: '#FFA500',
-        glowColor: '#FFD700',
-        points: 36,
-        texture: 'star',
-        isLuminous: true
+        name: 'Jupiter',
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 7)),
+        color: '#D2691E',
+        glowColor: '#FF8C42',
+        points: 85,
+        texture: 'gas-giant'
     },
     {
         id: 8,
-        name: 'Sirius',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 8),
-        color: '#00BFFF',
-        glowColor: '#87CEFA',
-        points: 45,
-        texture: 'blue-star',
-        isLuminous: true
-    },
-    {
-        id: 9,
-        name: 'Black Hole',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 9),
-        color: '#1a0033',
-        glowColor: '#8B00FF',
-        points: 55,
-        texture: 'black-hole',
-        hasAccretionDisk: true
-    },
-    {
-        id: 10,
-        name: 'Supernova',
-        radius: BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 10),
-        color: '#FF1493',
-        glowColor: '#FF69B4',
-        points: 100,
-        texture: 'supernova',
-        isExplosive: true
+        name: 'Sun',
+        radius: Math.round(BASE_RADIUS * Math.pow(RADIUS_MULTIPLIER, 8)),
+        color: '#FFA500',
+        glowColor: '#FFD700',
+        points: 120,
+        texture: 'star',
+        isLuminous: true,
+        isFinal: true
     }
 ];
 

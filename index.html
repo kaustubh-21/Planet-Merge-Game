@@ -1,56 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="Pandu - A cosmic merge game where planets collide and evolve">
-  <meta name="theme-color" content="#1a0033">
+  <meta name="description" content="Pandu - A cosmic merge game where planets collide and evolve through the cosmos">
+  <meta name="theme-color" content="#050510">
   <title>Pandu - Cosmic Merge Game</title>
   <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background: linear-gradient(180deg, #0a0015 0%, #1a0033 50%, #0f001a 100%);
+      background: #050510;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Exo 2', sans-serif;
     }
-    
+
     #gameCanvas {
       display: block;
       max-width: 100%;
       max-height: 100%;
-      box-shadow: 0 0 50px rgba(139, 0, 255, 0.5);
-      border: 2px solid #8B00FF;
     }
-    
+
     #loading {
       position: absolute;
       color: white;
-      font-size: 24px;
+      font-family: 'Orbitron', sans-serif;
       text-align: center;
+      z-index: 10;
     }
-    
+
+    #loading h1 {
+      font-size: 36px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #a78bfa, #ec4899, #f59e0b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: none;
+      letter-spacing: 8px;
+      margin-bottom: 16px;
+    }
+
+    #loading p {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 3px;
+    }
+
     #loading.hidden {
       display: none;
     }
   </style>
 </head>
+
 <body>
   <div id="loading">
-    <h1>🌌 PANDU 🌌</h1>
-    <p>Loading cosmic merge experience...</p>
+    <h1>PANDU</h1>
+    <p>LOADING COSMOS...</p>
   </div>
-  <canvas id="gameCanvas" width="600" height="800"></canvas>
+  <canvas id="gameCanvas" width="450" height="800"></canvas>
   <script type="module" src="/main.js"></script>
 </body>
+
 </html>

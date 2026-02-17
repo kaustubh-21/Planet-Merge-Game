@@ -46,10 +46,10 @@ export class PhysicsEngine {
             friction: 0.1
         };
 
-        // Bottom
+        // Bottom — raised 60px to match visual container (hierarchy chart below)
         this.ground = Bodies.rectangle(
             this.width / 2,
-            this.height + wallThickness / 2,
+            this.height - 60 + wallThickness / 2,
             this.width,
             wallThickness,
             options
@@ -94,11 +94,10 @@ export class PhysicsEngine {
                 // Skip if either body is already marked for merge
                 if (bodyA.markedForMerge || bodyB.markedForMerge) continue;
 
-                // Check if both planets have the same ID and can merge
+                // Check if both planets have the same ID
                 if (bodyA.planetId !== undefined &&
                     bodyB.planetId !== undefined &&
-                    bodyA.planetId === bodyB.planetId &&
-                    canMerge(bodyA.planetId)) {
+                    bodyA.planetId === bodyB.planetId) {
 
                     // Mark bodies to prevent duplicate merges
                     bodyA.markedForMerge = true;
@@ -152,37 +151,47 @@ export class PhysicsEngine {
             // Skip if already merged
             if (mergedBodies.has(bodyA) || mergedBodies.has(bodyB)) continue;
 
-            // Calculate midpoint for new planet spawn
+            // Calculate midpoint
             const midX = (bodyA.position.x + bodyB.position.x) / 2;
             const midY = (bodyA.position.y + bodyB.position.y) / 2;
 
-            // Get next planet in chain
+            // Remove old planets
+            World.remove(this.world, bodyA);
+            World.remove(this.world, bodyB);
+            this.planets = this.planets.filter(p => p !== bodyA && p !== bodyB);
+            mergedBodies.add(bodyA);
+            mergedBodies.add(bodyB);
+
+            // Check if this is a final planet merge (Sun+Sun = disappear)
             const nextPlanetId = bodyA.planetId + 1;
             const nextPlanetConfig = getPlanetById(nextPlanetId);
 
             if (nextPlanetConfig) {
-                // Remove old planets
-                World.remove(this.world, bodyA);
-                World.remove(this.world, bodyB);
-                this.planets = this.planets.filter(p => p !== bodyA && p !== bodyB);
-
-                // Create new merged planet
+                // Normal merge: create new planet
                 const newPlanet = this.createPlanet(midX, midY, nextPlanetId);
 
-                // Mark as merged
-                mergedBodies.add(bodyA);
-                mergedBodies.add(bodyB);
-
-                // Store merge event for visual effects
                 mergeEvents.push({
                     x: midX,
                     y: midY,
                     oldPlanetId: bodyA.planetId,
                     newPlanetId: nextPlanetId,
-                    newPlanet: newPlanet
+                    newPlanet: newPlanet,
+                    type: 'merge'
                 });
 
                 console.log(`Merged: ${bodyA.planetConfig.name} -> ${nextPlanetConfig.name}`);
+            } else {
+                // Final merge (Sun+Sun): both disappear!
+                mergeEvents.push({
+                    x: midX,
+                    y: midY,
+                    oldPlanetId: bodyA.planetId,
+                    newPlanetId: -1,
+                    newPlanet: null,
+                    type: 'disappear'
+                });
+
+                console.log(`Disappeared: ${bodyA.planetConfig.name} + ${bodyA.planetConfig.name} = gone!`);
             }
         }
 
