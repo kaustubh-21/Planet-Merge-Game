@@ -24,57 +24,139 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background: #050510;
+      background: #020010;
       display: flex;
       justify-content: center;
       align-items: center;
       font-family: 'Exo 2', sans-serif;
     }
 
+    /* Background canvas for twinkling stars */
+    #bgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
     #gameCanvas {
-      display: block;
+      display: none;
       max-width: 100%;
       max-height: 100%;
+      z-index: 2;
+      position: relative;
     }
 
-    #loading {
+    #gameCanvas.visible {
+      display: block;
+    }
+
+    /* Title Screen */
+    #titleScreen {
       position: absolute;
-      color: white;
-      font-family: 'Orbitron', sans-serif;
       text-align: center;
       z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
     }
 
-    #loading h1 {
-      font-size: 36px;
+    #titleScreen h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 48px;
       font-weight: 900;
       background: linear-gradient(135deg, #a78bfa, #ec4899, #f59e0b);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: none;
-      letter-spacing: 8px;
-      margin-bottom: 16px;
+      letter-spacing: 12px;
+      margin-bottom: 0;
+      animation: titleGlow 3s ease-in-out infinite alternate;
     }
 
-    #loading p {
+    @keyframes titleGlow {
+      0% {
+        filter: brightness(1);
+      }
+
+      100% {
+        filter: brightness(1.2);
+      }
+    }
+
+    #titleScreen .subtitle {
       font-family: 'Exo 2', sans-serif;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.5);
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.35);
+      letter-spacing: 5px;
+      margin-bottom: 10px;
+    }
+
+    #playBtn {
+      display: none;
+      margin-top: 10px;
+      padding: 16px 56px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.3), rgba(236, 72, 153, 0.2));
+      border: 1.5px solid rgba(167, 139, 250, 0.5);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #playBtn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 45%;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.08), transparent);
+      border-radius: 16px 16px 0 0;
+      pointer-events: none;
+    }
+
+    #playBtn:hover {
+      background: linear-gradient(135deg, rgba(167, 139, 250, 0.5), rgba(236, 72, 153, 0.35));
+      border-color: rgba(167, 139, 250, 0.8);
+      box-shadow: 0 0 30px rgba(167, 139, 250, 0.2), 0 0 60px rgba(167, 139, 250, 0.1);
+      transform: translateY(-2px);
+    }
+
+    #playBtn:active {
+      transform: translateY(1px);
+    }
+
+    .loading-text {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.3);
       letter-spacing: 3px;
     }
 
-    #loading.hidden {
+    #titleScreen.hidden {
       display: none;
     }
   </style>
-  <script type="module" crossorigin src="/Planet-Merge-Game/assets/index-q6nt4eBl.js"></script>
+  <script type="module" crossorigin src="/Planet-Merge-Game/assets/index-LEyZlJbP.js"></script>
 </head>
 
 <body>
-  <div id="loading">
+  <canvas id="bgCanvas"></canvas>
+  <div id="titleScreen">
     <h1>PANDU</h1>
-    <p>LOADING COSMOS...</p>
+    <p class="subtitle">COSMIC MERGE GAME</p>
+    <button id="playBtn">PLAY</button>
+    <p class="loading-text" id="loadingText">LOADING COSMOS...</p>
   </div>
   <canvas id="gameCanvas" width="450" height="800"></canvas>
 </body>
